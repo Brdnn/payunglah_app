@@ -1,10 +1,16 @@
 {
   "expo": {
-    "name": "app",
-    "slug": "app",
+    "name": "PayungLah",
+    "slug": "PayungLah",
+    "scheme": "payunglah",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4459a31f-481e-41f7-8b68-b55a6481bc3d"
+      }
+    }
   }
 }

@@ -35,6 +35,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow $(PRODUCT_NAME) to use the camera</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>YOUR TEXT</string>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
