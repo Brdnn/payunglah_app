@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button } from "react-native";
+import { Text, View, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import CustomHeader from "../../components/header/CustomHeader";
 import { height, width } from "../../utils";
 import BarcodeMask from "react-native-barcode-mask";
 import { colors } from "../../constants/colors";
+import { fonts } from "../../constants/fonts";
 
 const ScannerScreen = (props) => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -24,7 +25,8 @@ const ScannerScreen = (props) => {
     const { origin, size } = bounds;
     const { x, y } = origin;
     const { width, height } = size;
-    const isWithinArea = x >= 40 && x + width <= 360 && y >= 40 && y + height <= 360;
+    const isWithinArea =
+      x >= 40 && x + width <= 360 && y >= 40 && y + height <= 360;
 
     if (isWithinArea) {
       setScanned(true);
@@ -33,10 +35,37 @@ const ScannerScreen = (props) => {
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return (
+      <>
+        <CustomHeader theme="dark" title="Scan QR" />
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text>Requesting for camera permission</Text>
+        </View>
+      </>
+    );
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return (
+      <>
+        <CustomHeader theme="dark" title="Scan QR" />
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: colors.white,
+            justifyContent: "center",
+            alignItems: "center",
+            paddingHorizontal: 40,
+          }}
+        >
+          <Text style={[fonts.h2]}>No access to camera</Text>
+          <Text style={[fonts.p, { textAlign: "center" }]}>
+            Please enable your camera permission on setting to continue
+          </Text>
+        </View>
+      </>
+    );
   }
 
   return (
@@ -46,7 +75,7 @@ const ScannerScreen = (props) => {
         <BarCodeScanner
           onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           style={[StyleSheet.absoluteFill, styles.container]}
-          barCodeTypes={[BarCodeScanner.Constants.Type.qr]}
+          // barCodeTypes={[BarCodeScanner.Constants.Type.qr]}
         />
         <BarcodeMask
           edgeColor={colors.primary}
@@ -55,7 +84,6 @@ const ScannerScreen = (props) => {
           showAnimatedLine={false}
           width={width / 1.5}
           height={width / 1.5}
-          showAnimatedLine={false}
         />
         <View
           style={{
@@ -81,10 +109,14 @@ const ScannerScreen = (props) => {
         </View>
 
         {scanned && (
-          <Button
-            title={"Tap to Scan Again"}
+          <TouchableOpacity
             onPress={() => setScanned(false)}
-          />
+            style={{ zIndex: 999 }}
+          >
+            <Text style={{ fontSize: 18, color: colors.white }}>
+              Tap to Scan Again
+            </Text>
+          </TouchableOpacity>
         )}
       </View>
     </>

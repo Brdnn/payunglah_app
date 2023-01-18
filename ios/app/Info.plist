@@ -36,13 +36,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) to use the camera</string>
+	<string>Allow $(PRODUCT_NAME) to use the camera to Scan QR Code.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>YOUR TEXT</string>
+		<string>Allow $(PRODUCT_NAME) to use your current location to get nearest device point.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>YOUR TEXT</string>
+		<string>Allow $(PRODUCT_NAME) to use your current location to get nearest device point.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>YOUR TEXT</string>
+	<string>Allow $(PRODUCT_NAME) to use your current location to get nearest device point.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

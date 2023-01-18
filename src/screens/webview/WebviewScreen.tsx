@@ -1,11 +1,26 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { WebView } from 'react-native-webview';
+import CustomHeader from '../../components/header/CustomHeader';
 
-const WebviewScreen = () => {
+const WebviewScreen = (props) => {
+  const { navigation } = props;
+
+  useEffect(() => {
+   console.log(props.route.params.url)
+  }, [])
+  
+
   return (
-    <View>
-      <Text>WebviewScreen</Text>
-    </View>
+    <>
+    <CustomHeader navigation={navigation} theme={"light"} title={"Payment"} />
+    <View style={{ flex: 1 }}>
+    <WebView
+      source={{ uri: 'https://expo.dev'}}
+      style={{ flex: 1 }}
+    />
+  </View>
+    </>
   )
 }
 

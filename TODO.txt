@@ -1,0 +1,33 @@
+App
+- App Icon
+- Splash Screen
+- Permission description (info.plist)
+- Google Maps API keys
+
+
+HomeScreen
+- Check user ongoing rental (if yes, use "I WANT TO RETURN UMBRELLA")
+- Map Umbrella icon (png/svg. prefer svg)
+- App Icon in Header (Middle)
+- Google Map API keys (for android)
+- Change new marker coordinate ( fetch device API)
+- Show price/hr in Marker detail
+- Click marker detail image to show Full screen image (allow to zoom)
+- Show ongoing rental time counting on map (Bottom of home header)
+- What if user no give location permit (show alert to force user open , redirect to setting)
+
+Reload Screen
+- Show topup value (refer to TouchnGo reload screen)
+
+Payment Screen
+- Setup payment gateway API (Billplz) webview
+
+History Screen
+- Show history of rental (ongoing & completed rental)
+
+Guide Screen
+- Show user the steps to start rental & return (Should be introduction screen)
+
+Help Screen
+- Show webview to Help center (website)
+

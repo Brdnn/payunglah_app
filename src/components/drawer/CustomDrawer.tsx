@@ -1,5 +1,5 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import React, { useContext } from "react";
 import {
   DrawerContent,
   DrawerContentScrollView,
@@ -9,9 +9,14 @@ import {
 import { colors } from "../../constants/colors";
 import * as Linking from "expo-linking";
 import LinearGradient from "react-native-linear-gradient";
+import { AuthContext } from "../../context/AuthContext";
+import SvgLogo from "../../assets/svgs/payunglah_logo";
+import { confirmAction } from "../../utils";
+import { fonts } from "../../constants/fonts";
 
-const CustomDrawer = (props: { navigation: any; }) => {
+const CustomDrawer = (props: { navigation: any }) => {
   const { navigation } = props;
+  const { userToken, userData, logout } = useContext(AuthContext);
 
   return (
     <View style={{ flex: 1 }}>
@@ -24,26 +29,47 @@ const CustomDrawer = (props: { navigation: any; }) => {
         }}
       >
         <LinearGradient
-          colors={[colors.primary, colors.quaternary]}
+          colors={[colors.primary, colors.primary]}
           style={{ flex: 1 }}
         >
           <View
-            style={{ marginHorizontal: 15, marginBottom: 20, marginTop: 20 }}
+            style={{
+              marginHorizontal: 15,
+              marginBottom: 20,
+              marginTop: 20,
+            }}
           >
-            <Text style={{ color: "white", fontSize: 22, fontWeight: "bold" }}>
-              PayungLah
-            </Text>
+            <SvgLogo style={{ width: "100%", height: 40 }} />
           </View>
-          <DrawerItem
-            label={"Payment and Credit"}
-            onPress={() => navigation.navigate("HelpScreen")}
-            labelStyle={{ color: "white", fontSize: 16 }}
-          />
-          <DrawerItem
-            label={"History"}
-            onPress={() => navigation.navigate("HelpScreen")}
-            labelStyle={{ color: "white", fontSize: 16 }}
-          />
+          {userToken && (
+            <>
+              <DrawerItem
+                label={"Profile"}
+                onPress={() => {
+                  navigation.navigate("ProfileScreen");
+                  navigation.closeDrawer();
+                }}
+                labelStyle={{ color: "white", fontSize: 16 }}
+              />
+              <DrawerItem
+                label={"Wallet"}
+                onPress={() => {
+                  navigation.navigate("WalletScreen");
+                  navigation.closeDrawer();
+                }}
+                labelStyle={{ color: "white", fontSize: 16 }}
+              />
+              <DrawerItem
+                label={"History"}
+                onPress={() => {
+                  navigation.navigate("RentalHistoryScreen");
+                  navigation.closeDrawer();
+                }}
+                labelStyle={{ color: "white", fontSize: 16 }}
+              />
+            </>
+          )}
+
           <DrawerItem
             label={"Guide"}
             onPress={() => navigation.navigate("HelpScreen")}
@@ -54,6 +80,21 @@ const CustomDrawer = (props: { navigation: any; }) => {
             onPress={() => navigation.navigate("HelpScreen")}
             labelStyle={{ color: "white", fontSize: 16 }}
           />
+          {userToken && (
+            <DrawerItem
+              label={"Logout"}
+              onPress={() =>
+                confirmAction(
+                  "Logout",
+                  "Are you sure to logout?",
+                  "Logout",
+                  logout
+                )
+              }
+              labelStyle={[fonts.h2,{ color: colors.white, fontSize: 16, 
+              marginTop: 10 }]}
+            />
+          )}
           {/* <DrawerItemList {...props} /> */}
         </LinearGradient>
       </DrawerContentScrollView>

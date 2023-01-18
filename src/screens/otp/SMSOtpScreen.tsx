@@ -1,6 +1,9 @@
 import {
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -16,6 +19,7 @@ import { Icon } from "@rneui/themed";
 import axios from "axios";
 import { siteUrl } from "../../config/site";
 import { AuthContext } from "../../context/AuthContext";
+import SubmitBtn from "../../components/button/SubmitBtn";
 
 const SMSOtpScreen = (props) => {
   let { navigation } = props;
@@ -51,67 +55,61 @@ const SMSOtpScreen = (props) => {
   return (
     <>
       <CustomHeader theme="dark" title="Verification" />
-      <View style={styles.container}>
-        {isLoading && (
-          <View style={styles.overlay}>
-            <ActivityIndicator size="large" color={colors.white} />
-          </View>
-        )}
-        <View style={[tw`justify-center items-center mt-8`]}>
-          <Icon
-            reverse
-            reverseColor={colors.white}
-            type={"ionicon"}
-            name="lock-closed"
-            size={80}
-            color={colors.primary}
-          />
-          <Text
-            style={{
-              marginTop: 20,
-              fontSize: 22,
-              color: colors.primary,
-              fontWeight: "500",
-            }}
-          >
-            Account Verification
-          </Text>
-          <Text style={{ marginTop: 20, color: colors.lightBlack }}>
-            Please enter the 6-digit code sent to
-          </Text>
-          <Text style={{ color: colors.lightBlack, fontWeight: "bold" }}>
-            {phone}
-          </Text>
-        </View>
-
-        <View style={[{ marginHorizontal: 20 }]}>
-          <OTPTextView
-            containerStyle={styles.textInputContainer}
-            textInputStyle={styles.roundedTextInput}
-            handleTextChange={(code: string) => setOtp(code)}
-            inputCount={6}
-            keyboardType="numeric"
-            tintColor={colors.primary}
-            offTintColor={colors.primary}
-          />
-          <TouchableOpacity
-            disabled={otp.length !== 6}
-            onPress={verifyOtp}
-            style={[
-              styles.submitBtn,
-              {
-                backgroundColor: otp.length === 6 ? colors.primary : "grey",
-              },
-            ]}
-          >
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView style={styles.container}>
+          {isLoading && (
+            <View style={styles.overlay}>
+              <ActivityIndicator size="large" color={colors.white} />
+            </View>
+          )}
+          <View style={[tw`justify-center items-center mt-8`]}>
+            <Icon
+              reverse
+              reverseColor={colors.white}
+              type={"ionicon"}
+              name="lock-closed"
+              size={68}
+              color={colors.primary}
+            />
             <Text
-              style={{ color: colors.white, fontWeight: "bold", fontSize: 16 }}
+              style={{
+                marginTop: 20,
+                fontSize: 22,
+                color: colors.primary,
+                fontWeight: "500",
+              }}
             >
-              Verify
+              Account Verification
             </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+            <Text style={{ marginTop: 20, color: colors.lightBlack }}>
+              Please enter the 6-digit code sent to
+            </Text>
+            <Text style={{ color: colors.lightBlack, fontWeight: "bold" }}>
+              {phone}
+            </Text>
+          </View>
+
+          <View style={[{ marginHorizontal: 20 }]}>
+            <OTPTextView
+              containerStyle={styles.textInputContainer}
+              textInputStyle={styles.roundedTextInput}
+              handleTextChange={(code: string) => setOtp(code)}
+              inputCount={6}
+              keyboardType="numeric"
+              tintColor={colors.primary}
+              offTintColor={colors.primary}
+            />
+          </View>
+        </ScrollView>
+        <SubmitBtn
+          disabled={otp.length !== 6}
+          text="Verify"
+          callback={verifyOtp}
+        />
+      </KeyboardAvoidingView>
     </>
   );
 };

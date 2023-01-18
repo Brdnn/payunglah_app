@@ -12,12 +12,18 @@ import ScannerScreen from "../screens/camera/ScannerScreen";
 import CustomDrawer from "../components/drawer/CustomDrawer";
 import HelpScreen from "../screens/help/HelpScreen";
 import SMSOtpScreen from "../screens/otp/SMSOtpScreen";
+import WalletScreen from "../screens/wallet/WalletScreen";
+import PaymentScreen from "../screens/payment/PaymentScreen";
+import ReloadScreen from "../screens/payment/ReloadScreen";
+import RentalHistoryScreen from "../screens/rental/RentalHistoryScreen";
+import WithdrawalScreen from "../screens/payment/WithdrawalScreen";
+import ProfileScreen from "../screens/profile/ProfileScreen";
 
 const Drawer = createDrawerNavigator();
 
 const MyDrawer = () => {
   return (
-    <Drawer.Navigator drawerContent={props => <CustomDrawer {...props} /> }>
+    <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}>
       <Drawer.Screen
         name="HomeScreen"
         component={HomeScreen}
@@ -25,7 +31,6 @@ const MyDrawer = () => {
           headerShown: false,
           title: "Home",
           // activeTintColor: "red",
-
         }}
       />
       <Drawer.Screen
@@ -89,13 +94,59 @@ const RootStack = () => {
             headerShown: false,
           }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="ScannerScreen"
           component={ScannerScreen}
           options={{
             headerShown: false,
           }}
         />
+        <Stack.Group screenOptions={{ headerShown: false }}>
+          <Stack.Screen
+            name="ReloadScreen"
+            component={ReloadScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="WithdrawalScreen"
+            component={WithdrawalScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Group>
+        <Stack.Group screenOptions={{ headerShown: false }}>
+        <Drawer.Screen
+            name="ProfileScreen"
+            component={ProfileScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Drawer.Screen
+            name="WalletScreen"
+            component={WalletScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Drawer.Screen
+            name="PaymentScreen"
+            component={PaymentScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Drawer.Screen
+            name="RentalHistoryScreen"
+            component={RentalHistoryScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );

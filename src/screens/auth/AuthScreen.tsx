@@ -1,6 +1,8 @@
 import {
   ActivityIndicator,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,6 +18,7 @@ import { Icon } from "@rneui/themed";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { siteUrl } from "../../config/site";
+import SubmitBtn from "../../components/button/SubmitBtn";
 
 const AuthScreen = (props: { navigation: any }) => {
   const { navigation } = props;
@@ -66,72 +69,74 @@ const AuthScreen = (props: { navigation: any }) => {
   return (
     <>
       <CustomHeader theme="light" title={"Enter phone number"} />
-
-      <View style={styles.container}>
-        {isLoading && (
-          <View style={styles.overlay}>
-            <ActivityIndicator size="large" color={colors.white} />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <View style={styles.container}>
+          {isLoading && (
+            <View style={styles.overlay}>
+              <ActivityIndicator size="large" color={colors.white} />
+            </View>
+          )}
+          <View style={{ marginTop: 10 }}>
+            <View style={{ alignItems: "center" }}>
+              <PhoneInput
+                ref={phoneInput}
+                defaultValue={value}
+                defaultCode="MY"
+                layout="first"
+                onChangeText={(text) => {
+                  setValue(text);
+                }}
+                onChangeFormattedText={(text) => {
+                  setFormattedValue(text);
+                }}
+                renderDropdownImage={
+                  <Icon
+                    size={18}
+                    name="caret-down"
+                    type="ionicon"
+                    color={colors.lightBlack}
+                  />
+                }
+                textContainerStyle={{
+                  backgroundColor: colors.white,
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: colors.lightBlack,
+                }}
+                codeTextStyle={{ color: colors.lightBlack }}
+                containerStyle={{
+                  backgroundColor: colors.white,
+                }}
+                textInputProps={{
+                  placeholderTextColor: "#a9a9a9",
+                  style: {
+                    color: colors.lightBlack,
+                  },
+                }}
+                flagButtonStyle={{
+                  borderBottomWidth: 0.5,
+                  borderBottomColor: colors.lightBlack,
+                  marginRight: 5,
+                }}
+                countryPickerProps={{
+                  withAlphaFilter: true,
+                  countryCodes: ["MY"],
+                }}
+                // withDarkTheme
+                // withShadow
+                // autoFocus
+              />
+            </View>
           </View>
-        )}
-        <View>
-          <View style={{ alignItems: "center" }}>
-            <PhoneInput
-              ref={phoneInput}
-              defaultValue={value}
-              defaultCode="MY"
-              layout="first"
-              onChangeText={(text) => {
-                setValue(text);
-              }}
-              onChangeFormattedText={(text) => {
-                setFormattedValue(text);
-              }}
-              renderDropdownImage={
-                <Icon
-                  size={18}
-                  name="caret-down"
-                  type="ionicon"
-                  color={colors.white}
-                />
-              }
-              textContainerStyle={{
-                backgroundColor: colors.primary,
-                borderBottomWidth: 0.5,
-                borderBottomColor: colors.white,
-              }}
-              codeTextStyle={{ color: colors.white }}
-              containerStyle={{
-                backgroundColor: colors.primary,
-              }}
-              textInputProps={{
-                placeholderTextColor: "#a9a9a9",
-                style: {
-                  color: colors.white,
-                },
-              }}
-              flagButtonStyle={{
-                borderBottomWidth: 0.5,
-                borderBottomColor: colors.white,
-                marginRight: 5,
-              }}
-              countryPickerProps={{
-                withAlphaFilter: true,
-                countryCodes: ["MY"],
-              }}
-              // withDarkTheme
-              // withShadow
-              // autoFocus
-            />
-          </View>
+          <SubmitBtn
+            disabled={isLoading}
+            text="Send Confirmation Pin"
+            callback={handleLogin}
+          />
         </View>
-        <TouchableOpacity
-          disabled={isLoading}
-          style={styles.submitBtn}
-          onPress={handleLogin}
-        >
-          <Text style={styles.submitBtnText}>Send Confirmation Pin</Text>
-        </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
     </>
   );
 };
@@ -141,7 +146,7 @@ export default AuthScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.white,
   },
   overlay: {
     position: "absolute",
@@ -156,7 +161,7 @@ const styles = StyleSheet.create({
     zIndex: 9999,
   },
   submitBtn: {
-    backgroundColor: colors.quaternary,
+    backgroundColor: colors.primary,
     position: "absolute",
     bottom: 15,
     width: width - 40,
