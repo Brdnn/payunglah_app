@@ -16,6 +16,7 @@ type UserData = {
 
 export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userToken, setUserToken] = useState<string>(null);
   const [userData, setUserData] = useState<UserData>(null);
   const socket = useContext(SocketContext);
@@ -31,16 +32,19 @@ export const AuthProvider = ({ children }) => {
       if (!res.data?.data) {
         Alert.alert("Error", "Something went wrong");
         setIsLoading(false);
+        setIsLoggedIn(false);
         return;
       }
       await SecureStore.setItemAsync("userToken", JSON.stringify(token));
       setUserToken(token);
       setUserData(res.data.data);
+      setIsLoggedIn(true);
       socket.emit("user_connected", { userId: res.data.data.id });
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      console.log("login", error);
       setIsLoading(false);
+      setIsLoggedIn(false);
     }
   };
 
@@ -51,17 +55,18 @@ export const AuthProvider = ({ children }) => {
       setUserToken(null);
       setUserData(null);
       setIsLoading(false);
+      setIsLoggedIn(false);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
     }
   };
 
-  const isLoggedIn = async () => {
+  const checkLogin = async () => {
     try {
       setIsLoading(true);
       const token = await SecureStore.getItemAsync("userToken");
-
+      console.log("checkLogin", token);
       if (!token) {
         setIsLoading(false);
         return;
@@ -77,28 +82,33 @@ export const AuthProvider = ({ children }) => {
         setUserToken(null);
         setUserData(null);
         setIsLoading(false);
+        setIsLoggedIn(false);
         return;
       }
       console.log("Logged In", JSON.parse(token));
+      setIsLoggedIn(true);
       setUserToken(JSON.parse(token));
       setUserData(res.data.data);
       socket.emit("user_connected", { userId: res.data.data.id });
       setIsLoading(false);
+      return res.data.data
     } catch (error) {
-      console.log(error);
+      console.log("checkLogin", error);
       setUserToken(null);
       setUserData(null);
       setIsLoading(false);
+      setIsLoggedIn(false);
+      return false
     }
   };
 
   useEffect(() => {
-    isLoggedIn();
+    checkLogin();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ login, logout, isLoading, userToken, userData, setUserData }}
+      value={{ login, logout, isLoggedIn, isLoading, userToken, userData, checkLogin, setUserData }}
     >
       {children}
     </AuthContext.Provider>

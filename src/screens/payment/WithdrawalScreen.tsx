@@ -202,7 +202,7 @@ const WithdrawalScreen = (props) => {
         </ScrollView>
         <SubmitBtn
           callback={handleWithdraw}
-          text="Reload"
+          text="Withdraw"
           disabled={!isFormReady}
         />
       </KeyboardAvoidingView>

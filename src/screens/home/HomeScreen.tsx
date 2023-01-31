@@ -40,6 +40,7 @@ import { fonts } from "../../constants/fonts";
 import { SocketContext } from "../../context/SocketContext";
 import UmbrellaIcon from "../../assets/svgs/umbrella_icon";
 import MapboxGL from "@rnmapbox/maps";
+import * as Notifications from "expo-notifications";
 
 MapboxGL.setAccessToken(
   "pk.eyJ1IjoicGF5dW5nbGFoIiwiYSI6ImNsY3Jiem1oNjBlZzgzcHF2dnE1YnNsNGIifQ.WlPf2-aWhCwdsiqf0S1iBQ"
@@ -54,7 +55,7 @@ const HomeScreen = (props: { navigation: any }) => {
 
   const socket = useContext(SocketContext);
 
-  const { isLoading, logout, userToken, userData } = useContext(AuthContext);
+  const { isLoading, logout, userToken, userData, checkLogin } = useContext(AuthContext);
   const [isLocationPermit, setIsLocationPermit] = useState<boolean>(true);
   const [mapReady, setMapReady] = useState<boolean>(false);
   const [isMapLoading, setIsMapLoading] = useState<boolean>(false);
@@ -84,7 +85,8 @@ const HomeScreen = (props: { navigation: any }) => {
   } = useBottomSheetDynamicSnapPoints(initialSnapPoints);
 
   useEffect(() => {
-    socket.on("refresh", (data) => {
+    socket.on("refresh", async (data) => {
+      await Notifications.cancelAllScheduledNotificationsAsync();
       handleRefresh();
     });
   }, []);
@@ -205,8 +207,9 @@ const HomeScreen = (props: { navigation: any }) => {
   };
 
   //Handle Rent
-  const handleRent = () => {
-    if (userData?.displayName.trim() == "") {
+  const handleRent = async () => {
+    const userData = await checkLogin();
+    if (userData?.displayName?.trim() == "") {
       Alert.alert(
         "Incomplete Profile",
         "Please update your profile to continue",
@@ -225,7 +228,7 @@ const HomeScreen = (props: { navigation: any }) => {
     } else if (userData?.balance < 20) {
       Alert.alert(
         "Insufficient Balance",
-        "Please top up your balance to continue",
+        `There must be at least RM20 in your wallet, please top up to continue`,
         [
           {
             text: "Cancel",

@@ -31,7 +31,7 @@ const CustomHeader = ({
       ? navigation.goBack()
       : navigation.reset({
           index: 0,
-          routes: [{ name: "HomeScreen" }],
+          routes: [{ name: "MyDrawer" }],
         });
   };
 

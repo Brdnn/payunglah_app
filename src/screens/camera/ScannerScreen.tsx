@@ -1,36 +1,114 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, StyleSheet, Button, TouchableOpacity } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+  Dimensions,
+  Alert,
+  Platform,
+} from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import CustomHeader from "../../components/header/CustomHeader";
 import { height, width } from "../../utils";
 import BarcodeMask from "react-native-barcode-mask";
 import { colors } from "../../constants/colors";
 import { fonts } from "../../constants/fonts";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import * as Linking from "expo-linking";
+// import * as IntentLauncher from "expo-intent-launcher";
 
 const ScannerScreen = (props) => {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [scanned, setScanned] = useState(false);
+  const navigation = useNavigation();
+  const [hasPermission, setHasPermission] = useState<boolean>(false);
+  const [scanned, setScanned] = useState<boolean>(false);
+  const [scannerMount, setScannerMount] = useState<boolean>(false)
+ 
 
-  useEffect(() => {
-    const getBarCodeScannerPermissions = async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === "granted");
-    };
+  useFocusEffect(
+    useCallback(() => {
+      getBarCodeScannerPermissions();
 
-    getBarCodeScannerPermissions();
-  }, []);
+      return () => {
+        console.log("ScannerScreen unmounted");
+        setScannerMount(false)
+      };
+    }, [])
+  );
 
+  const getBarCodeScannerPermissions = async () => {
+    const { status } = await BarCodeScanner.requestPermissionsAsync();
+    if (status === "denied") {
+      Alert.alert(
+        "Permisssion Required",
+        "Camera Access required to scan",
+        [
+          {
+            text: "Open Settings",
+            onPress: () => {
+              if (Platform.OS == "ios") {
+                Linking.openURL("app-settings://");
+              } else {
+                // IntentLauncher.startActivityAsync(
+                //   IntentLauncher.ActivityAction.APPLICATION_DETAILS_SETTINGS,
+                //   {data: "package:com.dcuss.dcussapp"}
+                // );
+              }
+            },
+          },
+          {
+            text: "Back",
+            style: "cancel",
+            onPress: () => {
+              navigation.goBack();
+            },
+          },
+        ]
+      );
+    }
+    setHasPermission(status === "granted");
+    setScannerMount(true)
+  };
+
+  var width = Dimensions.get("window").width;
+  var height = Dimensions.get("window").height;
+
+  let finderWidth = width / 2;
+  let finderHeight = width / 2;
+  let viewMinX = (width - finderWidth) / 2;
+  let viewMinY = (height - finderHeight) / 2;
+  
   const handleBarCodeScanned = ({ type, data, bounds }) => {
     // Check if the scanned QR code is within the desired area
     const { origin, size } = bounds;
     const { x, y } = origin;
     const { width, height } = size;
     const isWithinArea =
-      x >= 40 && x + width <= 360 && y >= 40 && y + height <= 360;
+      x >= viewMinX &&
+      y >= viewMinY &&
+      x <= viewMinX + finderWidth / 2 &&
+      y <= viewMinY + finderHeight / 2;
 
     if (isWithinArea) {
       setScanned(true);
-      alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+      console.log(data);
+      if (
+        data.includes("https://payunglah.com.my/qr") ||
+        data.slice(0, 8) == "payunglah"
+      ) {
+        let code = data.includes("qr/")
+          ? data.split("qr/")[1]
+          : data.split("payunglah/rent/")[1];
+        console.log("this is code", code);
+        navigation.navigate("RentalScreen", { code });
+      } else {
+        alert("Invalid QR Code");
+        console.log("Invalid QR Code");
+        setScanned(true)
+        // setScanned(false);
+      }
+      // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     }
   };
 
@@ -63,6 +141,18 @@ const ScannerScreen = (props) => {
           <Text style={[fonts.p, { textAlign: "center" }]}>
             Please enable your camera permission on setting to continue
           </Text>
+        </View>
+      </>
+    );
+  }
+
+  if(!scannerMount){
+    return (
+      <>
+        <CustomHeader theme="dark" title="Scan QR" />
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
         </View>
       </>
     );

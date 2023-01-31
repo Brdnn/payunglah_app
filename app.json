@@ -12,8 +12,44 @@
         "projectId": "4459a31f-481e-41f7-8b68-b55a6481bc3d"
       }
     },
+    "jsEngine": "hermes",
+    "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/4459a31f-481e-41f7-8b68-b55a6481bc3d"
+    },
     "plugins": [
-      "expo-tracking-transparency"
-    ]
+      "expo-tracking-transparency",
+      ["expo-notifications"]
+    ],
+    "ios": {
+      "bundleIdentifier": "com.payunglah.app",
+      "buildNumber": "1",
+      "supportsTablet": false
+    },
+    "android": {
+      "package": "com.payunglah.app",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "dcuss"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ],
+      "permissions": [
+        "CAMERA",
+        "READ_INTERNAL_STORAGE",
+        "WRITE_INTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_PHONE_STATE"
+      ],
+      "versionCode": 1
+    }
   }
 }

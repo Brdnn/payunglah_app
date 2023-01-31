@@ -45,7 +45,7 @@ const AuthScreen = (props: { navigation: any }) => {
         phone: formattedValue,
         country: phoneInput.current.getCountryCode(),
       });
-      console.log(res.data.data);
+      console.log(res.data);
       if (!res.data?.data) {
         Alert.alert("Error", "Something went wrong");
         setIsLoading(false);

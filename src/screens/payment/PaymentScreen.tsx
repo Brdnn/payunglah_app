@@ -1,18 +1,19 @@
 import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { WebView } from "react-native-webview";
 import CustomHeader from "../../components/header/CustomHeader";
 import { colors } from "../../constants/colors";
 import { width } from "../../utils";
 import { siteUrl } from "../../config/site";
 import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
 
 const PaymentScreen = (props) => {
   const { navigation } = props;
-
+  const { checkLogin } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUrl, setCurrentUrl] = useState("");
-  const handleNavigationStateChange = (navState) => {
+  const handleNavigationStateChange = async (navState) => {
     if (!navState.loading) {
       if (!navState.url) {
         return;
@@ -31,6 +32,7 @@ const PaymentScreen = (props) => {
 
         if (url.includes("billplz[paid]=true")) {
           Alert.alert("Success", "Payment successful");
+          await checkLogin();
           navigation.navigate("HomeScreen");
         } else {
           removeDueBill();

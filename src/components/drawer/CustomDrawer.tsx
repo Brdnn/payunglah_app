@@ -80,6 +80,14 @@ const CustomDrawer = (props: { navigation: any }) => {
             onPress={() => navigation.navigate("HelpScreen")}
             labelStyle={{ color: "white", fontSize: 16 }}
           />
+          {/* <DrawerItem
+            label={`${Linking.createURL("--/rent/sdkfj")}`}
+            onPress={async () => {
+              await Linking.openURL("payunglah://rent/sdkfj")
+             
+            }}
+            labelStyle={{ color: "white", fontSize: 16 }}
+          /> */}
           {userToken && (
             <DrawerItem
               label={"Logout"}
@@ -91,8 +99,10 @@ const CustomDrawer = (props: { navigation: any }) => {
                   logout
                 )
               }
-              labelStyle={[fonts.h2,{ color: colors.white, fontSize: 16, 
-              marginTop: 10 }]}
+              labelStyle={[
+                fonts.h2,
+                { color: colors.white, fontSize: 16, marginTop: 10 },
+              ]}
             />
           )}
           {/* <DrawerItemList {...props} /> */}

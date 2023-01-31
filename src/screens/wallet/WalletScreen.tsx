@@ -176,7 +176,7 @@ const WalletScreen = (props) => {
           <Text style={[fonts.h2, { fontSize: 16 }]}>#{item.id}</Text>
           <View
             style={{
-              backgroundColor: statusColor[item.status].bgColor,
+              backgroundColor: statusColor?.[item.status]?.bgColor,
               paddingHorizontal: 10,
               paddingVertical: 5,
               borderRadius: 5,
@@ -186,7 +186,7 @@ const WalletScreen = (props) => {
               style={[
                 fonts.h3,
                 {
-                  color: statusColor[item.status].textColor,
+                  color: statusColor[item.status]?.textColor,
                   fontSize: 12,
                   textTransform: "capitalize",
                 },
